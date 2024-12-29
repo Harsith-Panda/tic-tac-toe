@@ -13,6 +13,7 @@ void print() {
         cout << "   |   |   " << endl;
         cout << " " << board[2][0] << " | " << board[2][1] << " | " << board[2][2] << endl;
         cout << "   |   |   " << endl;
+		cout << endl;
 }
 
 void placer(int in, int steps) {
@@ -73,19 +74,18 @@ void placer(int in, int steps) {
 				placer(in,steps);
 			}
 		}
+	cout << endl;
 }
 
-bool checker(int in) {
+bool checker() {
 	if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) return true;
-	int x = 0;
-	if (in>3 && in<=6) {
-		x = 1;
-	} else if (in>6 && in<=9) {
-		x = 2;
-	}
-	int y = (in-1)%3;
-	if (board[0][y] == board[1][y] && board[1][y] == board[2][y]) return true;
-	if (board[x][0] == board[x][1] && board[x][1] == board[x][2]) return true;
+	if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) return true;
+
+	for (int i = 0; i < 3; i++) {
+        if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) return true;
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i]) return true;
+    }
+
 	return false;
 }
 
@@ -98,14 +98,28 @@ int main() {
 	cin >> p2;
 	cout << endl;
 	int steps = 1;
+	bool won = false;
 	while (steps <= 9) {
 		print();
 		int in;
 		placer(in,steps);
 		if (steps >= 5) {
-			cout << checker(in) << endl;
+			if (checker()) {
+				won = true;
+				break;
+			}
 		}
 		steps++;
 	}
+	if (!won) {
+		cout << "DRAW !! BETTER LUCK NEXT TIME !! 👍" << endl;
+	} else {
+		if (steps % 2 == 0) {
+			cout << p2 << " " << "Has Won The Game ! 👑" << endl;
+		} else {
+			cout << p1 << " " << "Has Won The Game ! 👑" << endl;
+		}
+	}
+
 	return 0;
 }
